@@ -25,13 +25,23 @@ namespace BusinesTransactions
         public MainWindow()
         {
             InitializeComponent();
-            DBConnect();
+
+            SqlQueryBuilder SqlQuery = new SqlQueryBuilder();
+            if (SqlQuery.CheckConnection()) 
+            {
+                string sqlExpression = "SELECT * FROM Transaction_Object";
+                var list = SqlQuery.DoSelect(sqlExpression);
+            }
 
             InitGrid();
         }
 
         public List<Transaction> Transactions { get; set; }
 
+        /// <summary>
+        /// Построитель SQL запросов
+        /// </summary>
+        public SqlQueryBuilder SqlQuery { get; set; }
 
         public void InitGrid()
         {
