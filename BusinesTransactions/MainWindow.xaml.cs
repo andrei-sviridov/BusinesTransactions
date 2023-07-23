@@ -26,15 +26,19 @@ namespace BusinesTransactions
         {
             InitializeComponent();
 
-            SqlQueryBuilder SqlQuery = new SqlQueryBuilder();
-            if (SqlQuery.CheckConnection()) 
+            Logger = new Logger();
+
+            SqlQuery = new SqlQueryBuilder();
+            if (!SqlQuery.CheckConnection()) 
             {
-                string sqlExpression = "SELECT * FROM Transaction_Object";
-                var list = SqlQuery.DoSelect(sqlExpression);
+                Logger.WriteLog("Ошибка подключения к БД!");
             }
 
             InitGrid();
+            LoadData();
         }
+
+        public Logger Logger { get; set; }
 
         public List<Transaction> Transactions { get; set; }
 
@@ -43,77 +47,71 @@ namespace BusinesTransactions
         /// </summary>
         public SqlQueryBuilder SqlQuery { get; set; }
 
+        /// <summary>
+        /// Вся работа по созданию грида
+        /// </summary>
         public void InitGrid()
         {
-            LoadColumns();
-            LoadData();
-        }
 
-        public void LoadColumns()
-        {
-            MainGrid.AutoGenerateColumns = false;
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "ИД",
-                Binding = new Binding("Id")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Дата",
-                Binding = new Binding("DateTime")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Сбербанк",
-                Binding = new Binding("Sberbank")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "--",
-                Binding = new Binding("Vector1")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Тинькофф",
-                Binding = new Binding("Tincoff")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "--",
-                Binding = new Binding("Vector2")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "ВТБ",
-                Binding = new Binding("VTB")
-            });
-            MainGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Комментарий",
-                Binding = new Binding("Comment")
-            });
         }
 
         public void LoadData()
         {
-            Transactions = new List<Transaction>();
-
+            if (MainListView != null && MainListView.ItemsSource != null)
             {
-                Transaction transaction = new Transaction();
-                transaction.Id = 1;
-                transaction.DateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
-                transaction.Sberbank = "1234";
-                transaction.Vector1 = "->";
-                transaction.Tincoff = "1234";
-                transaction.Vector2 = "";
-                transaction.VTB = "1234";
-                transaction.Comment = "test";
-
-                Transactions.Add(transaction);
+                MainListView.ItemsSource = null;
             }
 
+            string sqlExpression = @"
+                SELECT
+	                  tu.Transaction_Unit_Id			AS	ID
+	                , tu.Transaction_Unit_Dttm			AS	DTTM
+	                , tu.Transaction_Unit_Summ			AS	SUMM
+	                , tu.Transaction_Unit_Comment		AS	COMMENT
+	                , to1.Transaction_Object_Name		AS	WRITE_OFF_NAME
+	                , tot1.Transaction_Object_Type_Name	AS	WRITE_OFF_TYPE
+	                , to2.Transaction_Object_Name		AS	RECEIPT_NAME
+	                , tot2.Transaction_Object_Type_Name	AS	RECEIPT_TYPE
+                FROM
+	                Transaction_Unit tu
+	                INNER JOIN Transaction_Object to1
+		                ON to1.Transaction_Object_Id = tu.Transaction_Object_Id_Write_Off
+	                INNER JOIN Transaction_Object_Type tot1
+		                ON tot1.Transaction_Object_Type_Id = to1.Transaction_Object_Type_Id
+	                INNER JOIN Transaction_Object to2
+		                ON to2.Transaction_Object_Id = tu.Transaction_Object_Id_Receipt
+	                INNER JOIN Transaction_Object_Type tot2
+		                ON tot2.Transaction_Object_Type_Id = to2.Transaction_Object_Type_Id
 
-            MainGrid.ItemsSource = Transactions;
+            ";
+            var list = SqlQuery.DoSelect(sqlExpression);
+
+            List<Transaction> transactions = new List<Transaction>();
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    Transaction transaction = new Transaction();
+                    transaction.ID = item["ID"];
+                    transaction.DTTM = item["DTTM"];
+                    transaction.SUMM = item["SUMM"];
+                    transaction.COMMENT = item["COMMENT"];
+                    transaction.WRITE_OFF_NAME = item["WRITE_OFF_NAME"];
+                    transaction.WRITE_OFF_TYPE = item["WRITE_OFF_TYPE"];
+                    transaction.RECEIPT_NAME = item["RECEIPT_NAME"];
+                    transaction.RECEIPT_TYPE = item["RECEIPT_TYPE"];
+
+                    transactions.Add(transaction);
+                }
+            }
+            MainListView.ItemsSource = transactions;
+        }
+
+        public void AddTransaction()
+        {
+            var i = new AddTransactionWindow();
+            i.Owner = this;
+            i.Show();
         }
 
         /// <summary>
@@ -126,28 +124,31 @@ namespace BusinesTransactions
             /// </summary>
             public Transaction()
             {
-
+                SEPARATOR = "|";
             }
 
-            public int Id { get; set; }
+            public string ID { get; set; }
 
-            /// <summary>
-            /// Дата и время транзакции
-            /// </summary>
-            public string DateTime { get; set; }
+            public string DTTM { get; set; }
 
-            public string Sberbank { get; set; }
+            public string SUMM { get; set; }
 
-            public string Vector1 { get; set; }
+            public string COMMENT { get; set; }
 
-            public string Tincoff { get; set; }
+            public string WRITE_OFF_NAME { get; set; }
 
-            public string Vector2 { get; set; }
+            public string WRITE_OFF_TYPE { get; set; }
 
-            public string VTB { get; set; }
+            public string RECEIPT_NAME { get; set; }
 
-            public string Comment { get; set; }
+            public string RECEIPT_TYPE { get; set; }
 
+            public string SEPARATOR { get; set; }
+        }
+
+        private void AddTransactionButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddTransaction();
         }
     }
 }

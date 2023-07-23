@@ -1,0 +1,168 @@
+﻿<Window x:Class="BusinesTransactions.AddTransactionWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BusinesTransactions"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600"
+        
+        Background="#FFF5ED"
+        
+        >
+
+    <Window.Resources>
+        <Style x:Key="DefaultLabel" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+
+        <Style x:Key="DefaultTextBox" TargetType="TextBox">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="Background" Value="#FAE0D8" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+
+        <Style x:Key="DefaultComboBox" TargetType="ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="MinWidth" Value="50" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Background" Value="#FAE0D8" />
+        </Style>
+
+        <Style x:Key="DefaultButton" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Background" Value="#FFC5BF" />
+        </Style>
+
+        <Style x:Key="DefaultMainButton" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Background" Value="#FF968A" />
+        </Style>
+
+        <Style x:Key="DefaultHorisontalSeparator" TargetType="Border">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="BorderThickness" Value="0,0.5" />
+            <Setter Property="Height" Value="3" />
+            <Setter Property="Padding" Value="0" />
+
+        </Style>
+    </Window.Resources>
+    
+    
+    <Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Toolbar-->
+            <Border Grid.Row="0" Grid.Column="0">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="SaveButton" Content="Сохранить" Click="SaveButton_Click" Style="{StaticResource DefaultMainButton}"/>
+                    <Button x:Name="CancelButton" Content="Отмена" Click="CancelButton_Click" Style="{StaticResource DefaultButton}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource DefaultHorisontalSeparator}" />
+
+            <!--Main Grid-->
+            <Border Grid.Row="2" Grid.Column="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Grid.Column="0">
+                        <Label Content="Дата :" Style="{StaticResource DefaultLabel}"/>
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="1">
+                        <TextBox x:Name="DTTMTextBox" Text="23.07.2023 18:28" Style="{StaticResource DefaultTextBox}"/>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="0">
+                        <Label Content="Сумма :" Style="{StaticResource DefaultLabel}"/>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1">
+                        <TextBox x:Name="SUMMTextBox" Text="20000" Style="{StaticResource DefaultTextBox}"/>
+                    </Border>
+
+                    <Border Grid.Row="2" Grid.Column="0">
+                        <Label Content="Комментарий :" Style="{StaticResource DefaultLabel}"/>
+                    </Border>
+                    <Border Grid.Row="2" Grid.Column="1">
+                        <TextBox x:Name="COMMENTTextBox" Text="Комментарий" Style="{StaticResource DefaultTextBox}"/>
+                    </Border>
+
+                    <Border Grid.Row="3" Grid.Column="0">
+                        <Label Content="Списание :" Style="{StaticResource DefaultLabel}"/>
+                    </Border>
+                    <Border Grid.Row="3" Grid.Column="1">
+                        <ComboBox x:Name="WRITE_OFFComboBox" Style="{StaticResource DefaultComboBox}" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Name="ID" Text="{Binding ID}" Visibility="Collapsed"/>
+                                        <TextBlock x:Name="NAME" Text="{Binding NAME}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Border>
+
+                    <Border Grid.Row="4" Grid.Column="0">
+                        <Label Content="Поступление :" Style="{StaticResource DefaultLabel}"/>
+                    </Border>
+                    <Border Grid.Row="4" Grid.Column="1">
+                        <ComboBox x:Name="RECEIPTComboBox" Style="{StaticResource DefaultComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Name="ID" Text="{Binding ID}" Visibility="Collapsed"/>
+                                        <TextBlock x:Name="NAME" Text="{Binding NAME}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Border>
+                </Grid>
+            </Border>
+            
+        </Grid>
+    </Border>
+</Window>

@@ -20,14 +20,29 @@
 
                 <Border Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="AddButton" Content="Добавить транзакцию" Margin="1"/>
+                        <Button x:Name="AddTransactionButton" Content="Добавить транзакцию" Click="AddTransactionButton_Click"  Margin="1"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="0" Grid.Row="1" BorderThickness="0.5" Margin="0,2,0,2" BorderBrush="Gray"/>
 
                 <Border Grid.Column="0" Grid.Row="2">
-                    <DataGrid x:Name="MainGrid" Background="AliceBlue" AutoGenerateColumns="False"></DataGrid>
+                    <ListView Name="MainListView">
+                        <ListView.View>
+                            <GridView x:Name="MainGridView">
+                                <GridViewColumn Header="Ид" Width="auto" DisplayMemberBinding="{Binding ID}" />
+                                <GridViewColumn Header="Дата" Width="auto" DisplayMemberBinding="{Binding DTTM}" />
+                                <GridViewColumn Header="Сумма" Width="auto" DisplayMemberBinding="{Binding SUMM}" />
+                                <GridViewColumn Header="Комментарий" Width="auto" DisplayMemberBinding="{Binding COMMENT}" />
+                                <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
+                                <GridViewColumn Header="Списание" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_NAME}" />
+                                <GridViewColumn Header="Откуда" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_TYPE}" />
+                                <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
+                                <GridViewColumn Header="Поступление" Width="auto" DisplayMemberBinding="{Binding RECEIPT_NAME}" />
+                                <GridViewColumn Header="Куда" Width="auto" DisplayMemberBinding="{Binding RECEIPT_TYPE}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Border>
             </Grid>
         </Border>

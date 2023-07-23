@@ -12,8 +12,11 @@ namespace BusinesTransactions
     {
         public SqlQueryBuilder()
         {
+            Logger = new Logger();
             DBConnect();
         }
+
+        public Logger Logger { get; set; }
 
         /// <summary>
         /// Подключение к базе данных
@@ -32,7 +35,8 @@ namespace BusinesTransactions
         {
             if (_Connection != null)
             {
-                _Connection.Close();
+                // FIXME выдаёт ошибку
+                //_Connection.Close();
             }
         }
 
@@ -51,7 +55,7 @@ namespace BusinesTransactions
             }
             catch (SqlException ex)
             {
-                // log
+                Logger.WriteLog($"{ex.Message}");
             }
         }
 
@@ -72,7 +76,7 @@ namespace BusinesTransactions
                 }
                 catch (Exception ex)
                 {
-                    // log
+                    Logger.WriteLog($"{ex.Message}");
                 }
             }
 
@@ -96,8 +100,15 @@ namespace BusinesTransactions
         {
             int editedRowCount = 0;
 
-            SqlCommand command = new SqlCommand(sqlExpression, _Connection);
-            editedRowCount = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand(sqlExpression, _Connection);
+                editedRowCount = command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog($"{ex.Message}");
+            }
 
             return editedRowCount;
         }
@@ -115,33 +126,40 @@ namespace BusinesTransactions
             // Количество столбцов в таблице ответа
             int rowCount = 0;
 
-            SqlCommand command = new SqlCommand(sqlExpression, _Connection);
-            SqlDataReader reader = command.ExecuteReader();
-
-            if (reader.HasRows)
+            try
             {
-                // Получаем количество столбцов таблицы ответа
-                rowCount = reader.FieldCount;
+                SqlCommand command = new SqlCommand(sqlExpression, _Connection);
+                SqlDataReader reader = command.ExecuteReader();
 
-                // построчно считываем данные
-                // Проходим по всем строкам ответа
-                while (reader.Read())
+                if (reader.HasRows)
                 {
-                    // Для каждой строки данных ответа создаём Dictionary<string, string>
-                    Dictionary<string, string> dictionary = new Dictionary<string, string>();
-                    // Проходим по всем колонкам ответа и получаем её имя и данные, хранящиеся в сотответствующей колонке строки
-                    for (int i = 0; i < rowCount; i++)
+                    // Получаем количество столбцов таблицы ответа
+                    rowCount = reader.FieldCount;
+
+                    // построчно считываем данные
+                    // Проходим по всем строкам ответа
+                    while (reader.Read())
                     {
-                        dictionary.Add(reader.GetName(i), reader.GetValue(i).ToString());
+                        // Для каждой строки данных ответа создаём Dictionary<string, string>
+                        Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                        // Проходим по всем колонкам ответа и получаем её имя и данные, хранящиеся в сотответствующей колонке строки
+                        for (int i = 0; i < rowCount; i++)
+                        {
+                            dictionary.Add(reader.GetName(i), reader.GetValue(i).ToString());
+                        }
+
+                        // Заполненную строку ответа заносим в List<Dictionary<string, string>>
+                        queryResultList.Add(dictionary);
                     }
-
-                    // Заполненную строку ответа заносим в List<Dictionary<string, string>>
-                    queryResultList.Add(dictionary);
                 }
-            }
 
-            // Пока один SqlDataReader не закрыт, другой объект SqlDataReader для одного и того же подключения мы использовать не сможем
-            reader.Close();
+                // Пока один SqlDataReader не закрыт, другой объект SqlDataReader для одного и того же подключения мы использовать не сможем
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog($"{ex.Message}");
+            }
 
             return queryResultList;
         }
@@ -160,8 +178,15 @@ namespace BusinesTransactions
         {
             string aggregateFunctionResult = "";
 
-            SqlCommand command = new SqlCommand(sqlExpression, _Connection);
-            aggregateFunctionResult = command.ExecuteScalar().ToString();
+            try
+            {
+                SqlCommand command = new SqlCommand(sqlExpression, _Connection);
+                aggregateFunctionResult = command.ExecuteScalar().ToString();
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog($"{ex.Message}");
+            }
 
             return aggregateFunctionResult;
         }
