@@ -6,9 +6,8 @@
              xmlns:local="clr-namespace:BusinesTransactions"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600"
-        
-        Background="#FFF5ED"
-        
+               
+            Background="#FFF5ED"
         >
 
     <Window.Resources>
@@ -67,8 +66,8 @@
             <Setter Property="BorderThickness" Value="0,0.5" />
             <Setter Property="Height" Value="3" />
             <Setter Property="Padding" Value="0" />
-
         </Style>
+        
     </Window.Resources>
     
     
@@ -112,21 +111,21 @@
                         <Label Content="Дата :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="0" Grid.Column="1">
-                        <TextBox x:Name="DTTMTextBox" Text="23.07.2023 18:28" Style="{StaticResource DefaultTextBox}"/>
+                        <TextBox x:Name="DTTMTextBox" Text="23.07.2023 18:28:00" MinWidth="170" Style="{StaticResource DefaultTextBox}"/>
                     </Border>
 
                     <Border Grid.Row="1" Grid.Column="0">
                         <Label Content="Сумма :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="1" Grid.Column="1">
-                        <TextBox x:Name="SUMMTextBox" Text="20000" Style="{StaticResource DefaultTextBox}"/>
+                        <TextBox x:Name="SUMMTextBox" Text="20000" MinWidth="60" Style="{StaticResource DefaultTextBox}"/>
                     </Border>
 
                     <Border Grid.Row="2" Grid.Column="0">
                         <Label Content="Комментарий :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="2" Grid.Column="1">
-                        <TextBox x:Name="COMMENTTextBox" Text="Комментарий" Style="{StaticResource DefaultTextBox}"/>
+                        <TextBox x:Name="COMMENTTextBox" Text="Комментарий" MinWidth="120" Style="{StaticResource DefaultTextBox}"/>
                     </Border>
 
                     <Border Grid.Row="3" Grid.Column="0">

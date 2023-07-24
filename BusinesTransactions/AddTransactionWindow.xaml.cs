@@ -25,7 +25,8 @@ namespace BusinesTransactions
             InitializeComponent();
 
             SqlQuery = new SqlQueryBuilder();
-            DTTMTextBox.Text = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+
+            SetDefault();
 
             SetComboBoxItems();
         }
@@ -34,6 +35,13 @@ namespace BusinesTransactions
         /// Построитель SQL запросов
         /// </summary>
         public SqlQueryBuilder SqlQuery { get; set; }
+
+        public void SetDefault()
+        {
+            DTTMTextBox.Text = $"{DateTime.Now.ToString("dd.MM.yyyy")} {"12:00:00"}";
+            SUMMTextBox.Clear();
+            COMMENTTextBox.Clear();
+        }
 
         public void SetComboBoxItems()
         {
@@ -64,7 +72,7 @@ namespace BusinesTransactions
                 RECEIPTComboBox.ItemsSource = comboboxItems;
             }
         }
-
+        
         public void Save()
         {
             if (
@@ -83,31 +91,31 @@ namespace BusinesTransactions
                         $"  '{DTTMTextBox.Text}'" +
                         $", {SUMMTextBox.Text}" +
                         $", '{COMMENTTextBox.Text}'" +
-                        $", {((BusinesTransactions.AddTransactionWindow.CBItem)RECEIPTComboBox.SelectedItem).ID}" +
-                        $", {((BusinesTransactions.AddTransactionWindow.CBItem)WRITE_OFFComboBox.SelectedItem).ID}" +
+                        $", {((BusinesTransactions.CBItem)RECEIPTComboBox.SelectedItem).ID}" +
+                        $", {((BusinesTransactions.CBItem)WRITE_OFFComboBox.SelectedItem).ID}" +
                         $")";
                     var i = SqlQuery.DoDML(sqlExpression);
 
                     if (i > 0)
                     {
-                        // FIXME
-                        ((MainWindow)this.Owner).LoadData();
-                        this.Close();
+                        var informationWindow = new InformationWindow("Успешное добавление новой транзакции", 0);
+                        informationWindow.ShowDialog();
+
+                        this.DialogResult = true;
+                        CloseWindow();
+                    }
+                    else
+                    {
+                        var informationWindow = new InformationWindow($"Ошибка добавления новой транзакции", 0);
+                        informationWindow.ShowDialog();
                     }
                 }
             }
         }
 
-        public class CBItem
+        public void CloseWindow()
         {
-            public CBItem()
-            {
-
-            }
-
-            public string ID { get; set; }
-
-            public string NAME { get; set; }
+            this.Close();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -117,7 +125,7 @@ namespace BusinesTransactions
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            CloseWindow();
         }
     }
 }

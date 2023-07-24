@@ -59,9 +59,18 @@
     <Compile Include="AddTransactionWindow.xaml.cs">
       <DependentUpon>AddTransactionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CBItem.cs" />
+    <Compile Include="InformationWindow.xaml.cs">
+      <DependentUpon>InformationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="SqlQueryBuilder.cs" />
+    <Compile Include="Transaction.cs" />
     <Page Include="AddTransactionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InformationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

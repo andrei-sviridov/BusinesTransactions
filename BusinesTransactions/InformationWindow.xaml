@@ -1,17 +1,16 @@
-﻿<Window x:Class="BusinesTransactions.MainWindow"
+﻿<Window x:Class="BusinesTransactions.InformationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BusinesTransactions"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        
-            d:DesignHeight="400" d:DesignWidth="600"
+        Title="InformationWindow"
+        Height="200" Width="400"
+            d:DesignHeight="200" d:DesignWidth="400"
                
             Background="#FFF5ED"
         >
-
     <Window.Resources>
         <Style x:Key="DefaultLabel" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -78,49 +77,45 @@
             <Setter Property="Margin" Value="2" />
         </Style>
 
+        <Style x:Key="InformationTextBlock" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#FAE0D8" />
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="IsEnabled" Value="False" />
+        </Style>
+
     </Window.Resources>
 
-    <Grid>
-        <Border>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+    <Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-                <Border Grid.Column="0" Grid.Row="0">
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="AddTransactionButton" Content="Добавить транзакцию" Click="AddTransactionButton_Click" Style="{StaticResource DefaultButton}" />
-                        <Button x:Name="EditTransactionButton" Content="Изменить транзакцию" Click="EditTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
-                        <Button x:Name="DeleteTransactionButton" Content="Удалить транзакцию" Click="DeleteTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
-                    </StackPanel>
-                </Border>
+            <Border Grid.Row="0" Grid.Column="0">
+                <TextBlock x:Name="InformationTextBlock" Text="Тестовое информационное сообщение" Style="{StaticResource InformationTextBlock}"/>
+            </Border>
 
-                <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultHorisontalSeparator}" />
+            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource DefaultHorisontalSeparator}" />
 
-                <Border Grid.Column="0" Grid.Row="2">
-                    <ListView Name="MainListView" Style="{StaticResource DefaultListView}" >
-                        <ListView.View>
-                            <GridView x:Name="MainGridView">
-                                <GridViewColumn Header="Ид" Width="auto" DisplayMemberBinding="{Binding ID}" />
-                                <GridViewColumn Header="Дата" Width="auto" DisplayMemberBinding="{Binding DTTM}" />
-                                <GridViewColumn Header="Сумма" Width="auto" DisplayMemberBinding="{Binding SUMM}" />
-                                <GridViewColumn Header="Комментарий" Width="auto" DisplayMemberBinding="{Binding COMMENT}" />
-                                <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
-                                <GridViewColumn Header="Списание" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_NAME}" />
-                                <GridViewColumn Header="Откуда" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_TYPE}" />
-                                <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
-                                <GridViewColumn Header="Поступление" Width="auto" DisplayMemberBinding="{Binding RECEIPT_NAME}" />
-                                <GridViewColumn Header="Куда" Width="auto" DisplayMemberBinding="{Binding RECEIPT_TYPE}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Border>
-            </Grid>
-        </Border>
-    </Grid>
+            <!--Toolbar-->
+            <Border Grid.Row="2" Grid.Column="0">
+                <StackPanel x:Name="InformationToolbar" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="SaveButton" Content="Подтвердить" Click="SaveButton_Click"  Style="{StaticResource DefaultMainButton}"/>
+                    <Button x:Name="CancelButton" Content="Закрыть" Click="CancelButton_Click"  Style="{StaticResource DefaultButton}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+
 </Window>

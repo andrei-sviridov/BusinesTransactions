@@ -32,6 +32,9 @@ namespace BusinesTransactions
             if (!SqlQuery.CheckConnection()) 
             {
                 Logger.WriteLog("Ошибка подключения к БД!");
+
+                var informationWindow = new InformationWindow("Ошибка подключения к БД!", 0);
+                informationWindow.ShowDialog();
             }
 
             InitGrid();
@@ -110,45 +113,63 @@ namespace BusinesTransactions
         public void AddTransaction()
         {
             var i = new AddTransactionWindow();
-            i.Owner = this;
-            i.Show();
+            if (i.ShowDialog() == true)
+            {
+                this.LoadData();
+            }
         }
 
-        /// <summary>
-        /// Строка данных таблицы
-        /// </summary>
-        public class Transaction
-        {
-            /// <summary>
-            /// Конструктор строки данных таблицы
-            /// </summary>
-            public Transaction()
+        public void DeleteTransaction()
+        { 
+            if (MainListView.SelectedItem != null)
             {
-                SEPARATOR = "|";
+                var selected = (BusinesTransactions.Transaction)MainListView.SelectedItem;
+
+                var informationWindow = new InformationWindow($"Транзакция №{selected.ID} {Environment.NewLine}Удалить выбранную транзикцию?", 1);
+                if (informationWindow.ShowDialog() == true)
+                {
+                    string sqlExpression =
+                        $@"DELETE FROM
+                            Transaction_Unit
+                        WHERE
+                            Transaction_Unit_Id = {selected.ID}
+                        ";
+                    var i = SqlQuery.DoDML(sqlExpression);
+
+                    if (i > 0)
+                    {
+                        informationWindow = new InformationWindow("Успешное удаление выбранной транзакции", 0);
+                        informationWindow.ShowDialog();
+
+                        this.LoadData();
+                    }
+                    else
+                    {
+                        informationWindow = new InformationWindow("Ошибка удаления выбранной транзакции", 0);
+                        informationWindow.ShowDialog();
+                    }
+                }
             }
-
-            public string ID { get; set; }
-
-            public string DTTM { get; set; }
-
-            public string SUMM { get; set; }
-
-            public string COMMENT { get; set; }
-
-            public string WRITE_OFF_NAME { get; set; }
-
-            public string WRITE_OFF_TYPE { get; set; }
-
-            public string RECEIPT_NAME { get; set; }
-
-            public string RECEIPT_TYPE { get; set; }
-
-            public string SEPARATOR { get; set; }
+            else
+            {
+                var informationWindow = new InformationWindow("Не выбрана транзакция для удаления", 0);
+                informationWindow.ShowDialog();
+            }
         }
 
         private void AddTransactionButton_Click(object sender, RoutedEventArgs e)
         {
             AddTransaction();
+        }
+
+        private void DeleteTransactionButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteTransaction();
+        }
+
+        private void EditTransactionButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
