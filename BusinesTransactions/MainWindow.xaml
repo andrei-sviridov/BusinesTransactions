@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" 
         
-            d:DesignHeight="400" d:DesignWidth="600"
+            d:DesignHeight="1024" d:DesignWidth="1280"
                
             Background="#FFF5ED"
         >
@@ -15,6 +15,7 @@
     <Window.Resources>
         <Style x:Key="DefaultLabel" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="Verdana"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="2" />
@@ -94,31 +95,85 @@
 
                 <Border Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="AddTransactionButton" Content="Добавить транзакцию" Click="AddTransactionButton_Click" Style="{StaticResource DefaultButton}" />
-                        <Button x:Name="EditTransactionButton" Content="Изменить транзакцию" Click="EditTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
-                        <Button x:Name="DeleteTransactionButton" Content="Удалить транзакцию" Click="DeleteTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
+                        <Button x:Name="RefreshButton" Content="Обновить" ToolTip="Обновить данные" Click="RefreshButton_Click" Style="{StaticResource DefaultButton}" />
+
+                        <Border Width="5" />
+
+                        <Button x:Name="AddTransactionButton" Content="Добавить" ToolTip="Добавить транзакцию" Click="AddTransactionButton_Click" Style="{StaticResource DefaultButton}" />
+                        <Button x:Name="EditTransactionButton" IsEnabled="False" Content="Изменить" ToolTip="Изменить транзакцию" Click="EditTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
+                        <Button x:Name="DeleteTransactionButton" IsEnabled="False" Content="Удалить" ToolTip="Удалить транзакцию" Click="DeleteTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
+
+                        <Border Width="5" />
+                        <Label Content="Списание :" Style="{StaticResource DefaultLabel}"/>
+                        <ComboBox x:Name="WRITE_OFFComboBox" SelectionChanged="WRITE_OFFComboBox_SelectionChanged" Style="{StaticResource DefaultComboBox}" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Name="ID" Text="{Binding ID}" Visibility="Collapsed"/>
+                                        <TextBlock x:Name="NAME" Text="{Binding NAME}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        
+                        <Label Content="Поступление :" Style="{StaticResource DefaultLabel}"/>
+                        <ComboBox x:Name="RECEIPTComboBox" SelectionChanged="RECEIPTComboBox_SelectionChanged" Style="{StaticResource DefaultComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Name="ID" Text="{Binding ID}" Visibility="Collapsed"/>
+                                        <TextBlock x:Name="NAME" Text="{Binding NAME}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultHorisontalSeparator}" />
 
                 <Border Grid.Column="0" Grid.Row="2">
-                    <ListView Name="MainListView" Style="{StaticResource DefaultListView}" >
-                        <ListView.View>
-                            <GridView x:Name="MainGridView">
-                                <GridViewColumn Header="Ид" Width="auto" DisplayMemberBinding="{Binding ID}" />
-                                <GridViewColumn Header="Дата" Width="auto" DisplayMemberBinding="{Binding DTTM}" />
-                                <GridViewColumn Header="Сумма" Width="auto" DisplayMemberBinding="{Binding SUMM}" />
-                                <GridViewColumn Header="Комментарий" Width="auto" DisplayMemberBinding="{Binding COMMENT}" />
-                                <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
-                                <GridViewColumn Header="Списание" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_NAME}" />
-                                <GridViewColumn Header="Откуда" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_TYPE}" />
-                                <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
-                                <GridViewColumn Header="Поступление" Width="auto" DisplayMemberBinding="{Binding RECEIPT_NAME}" />
-                                <GridViewColumn Header="Куда" Width="auto" DisplayMemberBinding="{Binding RECEIPT_TYPE}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Column="0" Grid.Row="0">
+                            <ListView Name="MainListView" Style="{StaticResource DefaultListView}" ScrollViewer.CanContentScroll="True">
+                                <ListView.View>
+                                    <GridView x:Name="MainGridView">
+                                        <GridViewColumn Header="Ид" Width="auto" DisplayMemberBinding="{Binding ID}" />
+                                        <GridViewColumn Header="Дата" Width="auto" DisplayMemberBinding="{Binding DTTM}" />
+                                        <GridViewColumn Header="Сумма" Width="auto" DisplayMemberBinding="{Binding SUMM}" />
+                                        <GridViewColumn Header="Комментарий" Width="auto" DisplayMemberBinding="{Binding COMMENT}" />
+                                        <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
+                                        <GridViewColumn Header="Списание" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_NAME}" />
+                                        <GridViewColumn Header="Откуда" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_TYPE}" />
+                                        <GridViewColumn Header="Остаток" Width="auto" DisplayMemberBinding="{Binding WRITE_OFF_BALANCE}" />
+                                        <GridViewColumn Header="|" Width="auto" DisplayMemberBinding="{Binding SEPARATOR}"/>
+                                        <GridViewColumn Header="Поступление" Width="auto" DisplayMemberBinding="{Binding RECEIPT_NAME}" />
+                                        <GridViewColumn Header="Куда" Width="auto" DisplayMemberBinding="{Binding RECEIPT_TYPE}" />
+                                        <GridViewColumn Header="Остаток" Width="auto" DisplayMemberBinding="{Binding RECEIPT_BALANCE}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Border>
+
+                        <Border Grid.Column="1" Grid.Row="0">
+                            <StackPanel Orientation="Vertical">
+                                <Label Content="Текущий остаток" HorizontalAlignment="Center" Style="{StaticResource DefaultLabel}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox x:Name="CurrentBankTextBox" IsReadOnly="True" FontSize="12" HorizontalContentAlignment="Right" Style="{StaticResource DefaultTextBox}"/>
+                                    <TextBox x:Name="CurrentBalanceTextBox" IsReadOnly="True" FontSize="12" HorizontalContentAlignment="Left" Style="{StaticResource DefaultTextBox}"/>
+                                    <Border Width="5" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </Border>
             </Grid>
         </Border>

@@ -29,6 +29,7 @@ namespace BusinesTransactions
         public InformationWindow(string informationMessage = "", int typeWindow = 0)
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             switch (typeWindow)
             {

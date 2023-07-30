@@ -25,6 +25,8 @@ namespace BusinesTransactions
         public MainWindow()
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.WindowState = WindowState.Maximized;
 
             Logger = new Logger();
 
@@ -38,11 +40,14 @@ namespace BusinesTransactions
             }
 
             InitGrid();
-            LoadData();
+            Refresh();
         }
 
         public Logger Logger { get; set; }
 
+        /// <summary>
+        /// Список транзикций, полученных из БД
+        /// </summary>
         public List<Transaction> Transactions { get; set; }
 
         /// <summary>
@@ -67,24 +72,38 @@ namespace BusinesTransactions
 
             string sqlExpression = @"
                 SELECT
-	                  tu.Transaction_Unit_Id			AS	ID
-	                , tu.Transaction_Unit_Dttm			AS	DTTM
-	                , tu.Transaction_Unit_Summ			AS	SUMM
-	                , tu.Transaction_Unit_Comment		AS	COMMENT
-	                , to1.Transaction_Object_Name		AS	WRITE_OFF_NAME
-	                , tot1.Transaction_Object_Type_Name	AS	WRITE_OFF_TYPE
-	                , to2.Transaction_Object_Name		AS	RECEIPT_NAME
-	                , tot2.Transaction_Object_Type_Name	AS	RECEIPT_TYPE
+	                  tu.Transaction_Unit_Id				AS	ID
+	                , tu.Transaction_Unit_Dttm				AS	DTTM
+	                , tu.Transaction_Unit_Summ				AS	SUMM
+	                , tu.Transaction_Unit_Comment			AS	COMMENT
+                    , to1.Transaction_Object_Id			    AS	WRITE_OFF_ID
+	                , to1.Transaction_Object_Name			AS	WRITE_OFF_NAME
+	                , tot1.Transaction_Object_Type_Name		AS	WRITE_OFF_TYPE
+					, tob1.Transaction_Object_Balance_Summ	AS  WRITE_OFF_BALANCE
+	                , to2.Transaction_Object_Id			    AS	RECEIPT_ID
+	                , to2.Transaction_Object_Name			AS	RECEIPT_NAME
+	                , tot2.Transaction_Object_Type_Name		AS	RECEIPT_TYPE
+					, tob2.Transaction_Object_Balance_Summ	AS  RECEIPT_BALANCE
                 FROM
 	                Transaction_Unit tu
+
 	                INNER JOIN Transaction_Object to1
 		                ON to1.Transaction_Object_Id = tu.Transaction_Object_Id_Write_Off
 	                INNER JOIN Transaction_Object_Type tot1
 		                ON tot1.Transaction_Object_Type_Id = to1.Transaction_Object_Type_Id
+					LEFT JOIN Transaction_Object_Balance tob1
+						ON tob1.Transaction_Object_Id = to1.Transaction_Object_Id
+						AND tob1.Transaction_Unit_Id = tu.Transaction_Unit_Id
+
 	                INNER JOIN Transaction_Object to2
 		                ON to2.Transaction_Object_Id = tu.Transaction_Object_Id_Receipt
 	                INNER JOIN Transaction_Object_Type tot2
 		                ON tot2.Transaction_Object_Type_Id = to2.Transaction_Object_Type_Id
+					LEFT JOIN Transaction_Object_Balance tob2
+						ON tob2.Transaction_Object_Id = to2.Transaction_Object_Id
+						AND tob2.Transaction_Unit_Id = tu.Transaction_Unit_Id
+				ORDER BY
+					tu.Transaction_Unit_Dttm
 
             ";
             var list = SqlQuery.DoSelect(sqlExpression);
@@ -99,15 +118,159 @@ namespace BusinesTransactions
                     transaction.DTTM = item["DTTM"];
                     transaction.SUMM = item["SUMM"];
                     transaction.COMMENT = item["COMMENT"];
+                    transaction.WRITE_OFF_ID= item["WRITE_OFF_ID"];
                     transaction.WRITE_OFF_NAME = item["WRITE_OFF_NAME"];
                     transaction.WRITE_OFF_TYPE = item["WRITE_OFF_TYPE"];
+                    transaction.WRITE_OFF_BALANCE = item["WRITE_OFF_BALANCE"];
+                    transaction.RECEIPT_ID= item["RECEIPT_ID"];
                     transaction.RECEIPT_NAME = item["RECEIPT_NAME"];
                     transaction.RECEIPT_TYPE = item["RECEIPT_TYPE"];
+                    transaction.RECEIPT_BALANCE = item["RECEIPT_BALANCE"];
 
                     transactions.Add(transaction);
                 }
             }
-            MainListView.ItemsSource = transactions;
+
+            Transactions = transactions;
+            MainListView.ItemsSource = Transactions;
+        }
+
+        public void FilterItems()
+        {
+            // Если есть что фильтровать, то фильтруем
+            if (MainListView != null && MainListView.ItemsSource != null && Transactions != null && Transactions.Count > 0)
+            {
+                MainListView.ItemsSource = null;
+                List<Transaction> resultItemSource = Transactions;
+
+                // Фильтрация проходит последовательно
+
+                if (WRITE_OFFComboBox.SelectedItem != null)
+                {
+                    string writeOffId = ((BusinesTransactions.CBItem)WRITE_OFFComboBox.SelectedItem).ID;
+                    if (writeOffId != "-1")
+                    {
+                        resultItemSource = resultItemSource.Where(x => x.WRITE_OFF_ID == writeOffId).ToList();
+                    }
+                }
+
+                if (RECEIPTComboBox.SelectedItem != null)
+                {
+                    string receiptId = ((BusinesTransactions.CBItem)RECEIPTComboBox.SelectedItem).ID;
+                    if (receiptId != "-1")
+                    {
+                        resultItemSource = resultItemSource.Where(x => x.RECEIPT_ID == receiptId).ToList();
+                    }
+                }
+
+                MainListView.ItemsSource = resultItemSource;
+            }
+        }
+
+        public void SetComboBoxItems()
+        {
+            string sqlExpression = @"
+                SELECT
+	                  Transaction_Object_Id		AS ID
+	                , Transaction_Object_Name	AS NAME
+                FROM
+	                Transaction_Object
+
+            ";
+            var list = SqlQuery.DoSelect(sqlExpression);
+
+            if (list != null && list.Count > 0)
+            {
+                List<CBItem> comboboxItems = new List<CBItem>();
+
+                // Добавляем элемент для выбора всех значений
+                {
+                    CBItem cBItem = new CBItem();
+                    cBItem.ID = "-1";
+                    cBItem.NAME = "Все";
+
+                    comboboxItems.Add(cBItem);
+                }
+
+                foreach (var item in list)
+                {
+                    CBItem cBItem = new CBItem();
+                    cBItem.ID = item["ID"];
+                    cBItem.NAME = item["NAME"];
+
+                    comboboxItems.Add(cBItem);
+                }
+
+                WRITE_OFFComboBox.ItemsSource = comboboxItems;
+                WRITE_OFFComboBox.SelectedItem = ((List<CBItem>)WRITE_OFFComboBox.ItemsSource).FirstOrDefault(x => x.ID == "-1");
+                RECEIPTComboBox.ItemsSource = comboboxItems;
+                RECEIPTComboBox.SelectedItem = ((List<CBItem>)RECEIPTComboBox.ItemsSource).FirstOrDefault(x => x.ID == "-1");
+            }
+        }
+
+        /// <summary>
+        /// Получаем данные по текущему балансу на личных счетах
+        /// </summary>
+        public void LoadCurrentBalanceData()
+        {
+            CurrentBankTextBox.Clear();
+            CurrentBalanceTextBox.Clear();
+
+            string currentBankText = $"Счёт{Environment.NewLine}---{Environment.NewLine}";
+            string currentBalanceText = $"Баланс{Environment.NewLine}---{Environment.NewLine}";
+
+            string sqlExpression = @"
+                SELECT
+	                  ISNULL(tob.Transaction_Object_Balance_Summ, 0.0)	AS BALANCE_SUMM
+	                , to1.Transaction_Object_Id							AS ID
+	                , to1.Transaction_Object_Name						AS NAME
+                FROM	
+	                Transaction_Object to1
+	                LEFT JOIN (
+		                SELECT	
+			                  tob.Transaction_Object_Id
+			                , tob.Transaction_Object_Balance_Summ
+		                FROM
+			                Transaction_Object_Balance tob
+			                INNER JOIN (
+				                SELECT
+					                  MAX(tob1.Transaction_Object_Balance_Dttm)	AS Transaction_Object_Balance_Dttm
+					                , tob1.Transaction_Object_Id				AS Transaction_Object_Id
+				                FROM
+					                Transaction_Object_Balance tob1
+				                GROUP BY
+					                tob1.Transaction_Object_Id
+			                ) tob1
+				                ON tob1.Transaction_Object_Id = tob.Transaction_Object_Id
+				                AND tob1.Transaction_Object_Balance_Dttm = tob.Transaction_Object_Balance_Dttm
+	                ) tob
+		                ON tob.Transaction_Object_Id = to1.Transaction_Object_Id
+                WHERE
+	                to1.Transaction_Object_Type_Id = 1
+                ORDER BY
+	                to1.Transaction_Object_Id
+
+            ";
+            var list = SqlQuery.DoSelect(sqlExpression);
+
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    currentBankText = $"{currentBankText}{item["NAME"]}{Environment.NewLine}---{Environment.NewLine}";
+                    currentBalanceText = $"{currentBalanceText}{item["BALANCE_SUMM"]}{Environment.NewLine}---{Environment.NewLine}";
+                }
+            }
+
+            CurrentBankTextBox.Text = currentBankText;
+            CurrentBalanceTextBox.Text = currentBalanceText;
+        }
+
+        public void Refresh()
+        {
+            this.LoadData();
+            SetComboBoxItems();
+            LoadCurrentBalanceData();
         }
 
         public void AddTransaction()
@@ -115,7 +278,7 @@ namespace BusinesTransactions
             var i = new AddTransactionWindow();
             if (i.ShowDialog() == true)
             {
-                this.LoadData();
+                Refresh();
             }
         }
 
@@ -141,7 +304,7 @@ namespace BusinesTransactions
                         informationWindow = new InformationWindow("Успешное удаление выбранной транзакции", 0);
                         informationWindow.ShowDialog();
 
-                        this.LoadData();
+                        Refresh();
                     }
                     else
                     {
@@ -170,6 +333,21 @@ namespace BusinesTransactions
         private void EditTransactionButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        private void WRITE_OFFComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterItems();
+        }
+
+        private void RECEIPTComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterItems();
         }
     }
 }

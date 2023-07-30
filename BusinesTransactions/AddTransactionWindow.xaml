@@ -13,6 +13,7 @@
     <Window.Resources>
         <Style x:Key="DefaultLabel" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="Verdana"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="2" />
@@ -67,6 +68,18 @@
             <Setter Property="Height" Value="3" />
             <Setter Property="Padding" Value="0" />
         </Style>
+
+        <Style x:Key="DefaultDatePicker" TargetType="DatePicker">
+            <Setter Property="IsDropDownOpen" Value="False" />
+            <Setter Property="SelectedDateFormat" Value="Short" />
+            <Setter Property="Background" Value="#FAE0D8" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
         
     </Window.Resources>
     
@@ -105,33 +118,47 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Grid.Column="0">
                         <Label Content="Дата :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="0" Grid.Column="1">
-                        <TextBox x:Name="DTTMTextBox" Text="23.07.2023 18:28:00" MinWidth="170" Style="{StaticResource DefaultTextBox}"/>
+                        <DatePicker x:Name="DateDatePicker" Style="{StaticResource DefaultDatePicker}" />
                     </Border>
 
                     <Border Grid.Row="1" Grid.Column="0">
-                        <Label Content="Сумма :" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="Время :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="1" Grid.Column="1">
-                        <TextBox x:Name="SUMMTextBox" Text="20000" MinWidth="60" Style="{StaticResource DefaultTextBox}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="HourTextBox" Text="12" MaxLength="2" Width="35" PreviewTextInput="HourTextBox_PreviewTextInput" Style="{StaticResource DefaultTextBox}"/>
+                            <Label Content=":" Style="{StaticResource DefaultLabel}"/>
+                            <TextBox x:Name="MinuteTextBox" Text="00" MaxLength="2" Width="35" PreviewTextInput="MinuteTextBox_PreviewTextInput" Style="{StaticResource DefaultTextBox}"/>
+                            <Label Content=":" Style="{StaticResource DefaultLabel}"/>
+                            <TextBox x:Name="SecondTextBox" Text="00" MaxLength="2" Width="35" PreviewTextInput="SecondTextBox_PreviewTextInput" Style="{StaticResource DefaultTextBox}"/>
+                        </StackPanel>
                     </Border>
 
                     <Border Grid.Row="2" Grid.Column="0">
-                        <Label Content="Комментарий :" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="Сумма :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="2" Grid.Column="1">
-                        <TextBox x:Name="COMMENTTextBox" Text="Комментарий" MinWidth="120" Style="{StaticResource DefaultTextBox}"/>
+                        <TextBox x:Name="SUMMTextBox" PreviewTextInput="SUMMTextBox_PreviewTextInput" Text="20000" MinWidth="60" Style="{StaticResource DefaultTextBox}"/>
                     </Border>
 
                     <Border Grid.Row="3" Grid.Column="0">
-                        <Label Content="Списание :" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="Комментарий :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
                     <Border Grid.Row="3" Grid.Column="1">
+                        <TextBox x:Name="COMMENTTextBox" Text="Комментарий" MinWidth="120" Style="{StaticResource DefaultTextBox}"/>
+                    </Border>
+
+                    <Border Grid.Row="4" Grid.Column="0">
+                        <Label Content="Списание :" Style="{StaticResource DefaultLabel}"/>
+                    </Border>
+                    <Border Grid.Row="4" Grid.Column="1">
                         <ComboBox x:Name="WRITE_OFFComboBox" Style="{StaticResource DefaultComboBox}" >
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -144,10 +171,10 @@
                         </ComboBox>
                     </Border>
 
-                    <Border Grid.Row="4" Grid.Column="0">
+                    <Border Grid.Row="5" Grid.Column="0">
                         <Label Content="Поступление :" Style="{StaticResource DefaultLabel}"/>
                     </Border>
-                    <Border Grid.Row="4" Grid.Column="1">
+                    <Border Grid.Row="5" Grid.Column="1">
                         <ComboBox x:Name="RECEIPTComboBox" Style="{StaticResource DefaultComboBox}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
