@@ -56,21 +56,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddTransactionWindow.xaml.cs">
+    <Compile Include="ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddTransactionWindow.xaml.cs">
       <DependentUpon>AddTransactionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CBItem.cs" />
-    <Compile Include="InformationWindow.xaml.cs">
+    <Compile Include="Classes\CBItem.cs" />
+    <Compile Include="Windows\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logger.cs" />
-    <Compile Include="SqlQueryBuilder.cs" />
-    <Compile Include="Transaction.cs" />
-    <Page Include="AddTransactionWindow.xaml">
+    <Compile Include="Classes\Logger.cs" />
+    <Compile Include="Classes\SqlQueryBuilder.cs" />
+    <Compile Include="Classes\Transaction.cs" />
+    <Compile Include="Windows\PeriodReport.xaml.cs">
+      <DependentUpon>PeriodReport.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ColorPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InformationWindow.xaml">
+    <Page Include="Windows\AddTransactionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\InformationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -86,6 +100,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\PeriodReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -112,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,84 +6,14 @@
              xmlns:local="clr-namespace:BusinesTransactions"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600"
-               
-            Background="#FFF5ED"
+            
+        Style="{StaticResource DefaultWindow}"
         >
 
     <Window.Resources>
-        <Style x:Key="DefaultLabel" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="2" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-
-        <Style x:Key="DefaultTextBox" TargetType="TextBox">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Background" Value="#FAE0D8" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-
-        <Style x:Key="DefaultComboBox" TargetType="ComboBox">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="MinWidth" Value="50" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Background" Value="#FAE0D8" />
-        </Style>
-
-        <Style x:Key="DefaultButton" TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Background" Value="#FFC5BF" />
-        </Style>
-
-        <Style x:Key="DefaultMainButton" TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Background" Value="#FF968A" />
-        </Style>
-
-        <Style x:Key="DefaultHorisontalSeparator" TargetType="Border">
-            <Setter Property="Background" Value="Black" />
-            <Setter Property="BorderThickness" Value="0,0.5" />
-            <Setter Property="Height" Value="3" />
-            <Setter Property="Padding" Value="0" />
-        </Style>
-
-        <Style x:Key="DefaultDatePicker" TargetType="DatePicker">
-            <Setter Property="IsDropDownOpen" Value="False" />
-            <Setter Property="SelectedDateFormat" Value="Short" />
-            <Setter Property="Background" Value="#FAE0D8" />
-            <Setter Property="FontFamily" Value="Verdana" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-        
+        <ResourceDictionary Source="C:\Users\andre\source\repos\BusinesTransactions\BusinesTransactions\MainStyles.xaml" />
     </Window.Resources>
-    
-    
+
     <Border>
         <Grid>
             <Grid.ColumnDefinitions>

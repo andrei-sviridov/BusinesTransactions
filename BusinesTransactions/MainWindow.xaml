@@ -9,77 +9,9 @@
         
             d:DesignHeight="1024" d:DesignWidth="1280"
                
-            Background="#FFF5ED"
+        Style="{StaticResource DefaultWindow}"
         >
 
-    <Window.Resources>
-        <Style x:Key="DefaultLabel" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="2" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-
-        <Style x:Key="DefaultTextBox" TargetType="TextBox">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Background" Value="#FAE0D8" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-
-        <Style x:Key="DefaultComboBox" TargetType="ComboBox">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="MinWidth" Value="50" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Background" Value="#FAE0D8" />
-        </Style>
-
-        <Style x:Key="DefaultButton" TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Background" Value="#FFC5BF" />
-        </Style>
-
-        <Style x:Key="DefaultMainButton" TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Background" Value="#FF968A" />
-        </Style>
-
-        <Style x:Key="DefaultHorisontalSeparator" TargetType="Border">
-            <Setter Property="Background" Value="Black" />
-            <Setter Property="BorderThickness" Value="0,0.5" />
-            <Setter Property="Height" Value="3" />
-            <Setter Property="Padding" Value="0" />
-        </Style>
-
-        <Style x:Key="DefaultListView" TargetType="ListView">
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5,2,5,2" />
-            <Setter Property="Background" Value="#FAE0D8" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-
-    </Window.Resources>
 
     <Grid>
         <Border>
@@ -95,15 +27,33 @@
 
                 <Border Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="RefreshButton" Content="Обновить" ToolTip="Обновить данные" Click="RefreshButton_Click" Style="{StaticResource DefaultButton}" />
+                        <Label Content="С" Style="{StaticResource DefaultLabel}"/>
+                        <DatePicker x:Name="FromDatePicker" Style="{StaticResource DefaultDatePicker}" />
+                        
+                        <Label Content="По" Style="{StaticResource DefaultLabel}"/>
+                        <DatePicker x:Name="ToDatePicker" Style="{StaticResource DefaultDatePicker}" />
 
+                        <Button x:Name="RefreshButton" Content="Обновить" ToolTip="Обновить данные" Click="RefreshButton_Click" Style="{StaticResource DefaultButton}" />
                         <Border Width="5" />
 
-                        <Button x:Name="AddTransactionButton" Content="Добавить" ToolTip="Добавить транзакцию" Click="AddTransactionButton_Click" Style="{StaticResource DefaultButton}" />
+                        <Menu>
+                            <MenuItem Header="Операции" ToolTip="Основные операции с транзакциями" Style="{StaticResource DefaultMenuItem}" >
+                                <MenuItem Header="Добавить" x:Name="AddTransactionMenuItem" Click="AddTransactionMenuItem_Click" ToolTip="Добавить транзакцию" Style="{StaticResource DefaultMenuItem}"  />
+                                <MenuItem Header="Изменить" x:Name="EditTransactionMenuItem" IsEnabled="False" ToolTip="Изменить транзакцию" Style="{StaticResource DefaultMenuItem}"/>
+                                <MenuItem Header="Удалить" x:Name="DeleteTransactionMenuItem" IsEnabled="False" ToolTip="Удалить транзакцию" Style="{StaticResource DefaultMenuItem}"/>
+                            </MenuItem>
+
+                            <MenuItem Header="Аналитика" ToolTip="Аналитика и визуализация транзакций" Style="{StaticResource DefaultMenuItem}" >
+                                <MenuItem Header="Отчёт по периодам" x:Name="PeriodReportMenuItem" Click="PeriodReportMenuItem_Click" ToolTip="Отчёт по двухнедельным периодам" Style="{StaticResource DefaultMenuItem}"/>
+                            </MenuItem>
+                        </Menu>
+                        <Border Width="5" />
+
+                        <!--<Button x:Name="AddTransactionButton" Content="Добавить" ToolTip="Добавить транзакцию" Click="AddTransactionButton_Click" Style="{StaticResource DefaultButton}" />
                         <Button x:Name="EditTransactionButton" IsEnabled="False" Content="Изменить" ToolTip="Изменить транзакцию" Click="EditTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
                         <Button x:Name="DeleteTransactionButton" IsEnabled="False" Content="Удалить" ToolTip="Удалить транзакцию" Click="DeleteTransactionButton_Click"  Style="{StaticResource DefaultButton}" />
-
-                        <Border Width="5" />
+                        <Border Width="5" />-->
+                        
                         <Label Content="Списание :" Style="{StaticResource DefaultLabel}"/>
                         <ComboBox x:Name="WRITE_OFFComboBox" SelectionChanged="WRITE_OFFComboBox_SelectionChanged" Style="{StaticResource DefaultComboBox}" >
                             <ComboBox.ItemTemplate>
@@ -128,6 +78,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
+                    
                 </Border>
 
                 <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultHorisontalSeparator}" />

@@ -1,0 +1,42 @@
+﻿<Window x:Class="BusinesTransactions.InformationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BusinesTransactions"
+        mc:Ignorable="d"
+        Title="InformationWindow"
+        Height="200" Width="400"
+            d:DesignHeight="200" d:DesignWidth="400"       
+        
+        Style="{StaticResource DefaultWindow}"
+        >
+
+    <Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0">
+                <TextBlock x:Name="InformationTextBlock" Text="Тестовое информационное сообщение" Style="{StaticResource InformationTextBlock}"/>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource DefaultHorisontalSeparator}" />
+
+            <!--Toolbar-->
+            <Border Grid.Row="2" Grid.Column="0">
+                <StackPanel x:Name="InformationToolbar" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="SaveButton" Content="Подтвердить" Click="SaveButton_Click"  Style="{StaticResource DefaultMainButton}"/>
+                    <Button x:Name="CancelButton" Content="Закрыть" Click="CancelButton_Click"  Style="{StaticResource DefaultButton}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+
+</Window>

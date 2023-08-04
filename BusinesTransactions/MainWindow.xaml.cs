@@ -28,6 +28,9 @@ namespace BusinesTransactions
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             this.WindowState = WindowState.Maximized;
 
+            FromDatePicker.SelectedDate = DateTime.Now.AddDays(-7);
+            ToDatePicker.SelectedDate = DateTime.Now;
+
             Logger = new Logger();
 
             SqlQuery = new SqlQueryBuilder();
@@ -70,7 +73,10 @@ namespace BusinesTransactions
                 MainListView.ItemsSource = null;
             }
 
-            string sqlExpression = @"
+            string fromDate = ((DateTime)FromDatePicker.SelectedDate).ToString("dd.MM.yyyy");
+            string toDate = ((DateTime)ToDatePicker.SelectedDate).ToString("dd.MM.yyyy");
+
+            string sqlExpression = $@"
                 SELECT
 	                  tu.Transaction_Unit_Id				AS	ID
 	                , tu.Transaction_Unit_Dttm				AS	DTTM
@@ -102,6 +108,9 @@ namespace BusinesTransactions
 					LEFT JOIN Transaction_Object_Balance tob2
 						ON tob2.Transaction_Object_Id = to2.Transaction_Object_Id
 						AND tob2.Transaction_Unit_Id = tu.Transaction_Unit_Id
+				WHERE
+					CAST(tu.Transaction_Unit_Dttm AS DATE) >= '{fromDate}'
+					AND CAST(tu.Transaction_Unit_Dttm AS DATE) <= '{toDate}'
 				ORDER BY
 					tu.Transaction_Unit_Dttm
 
@@ -320,6 +329,18 @@ namespace BusinesTransactions
             }
         }
 
+        /// <summary>
+        /// Отчёт по двухнедельным периодам
+        /// </summary>
+        public void PeriodReport()
+        {
+            var i = new PeriodReport();
+            if (i.ShowDialog() == true)
+            {
+                //Refresh();
+            }
+        }
+
         private void AddTransactionButton_Click(object sender, RoutedEventArgs e)
         {
             AddTransaction();
@@ -348,6 +369,16 @@ namespace BusinesTransactions
         private void RECEIPTComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FilterItems();
+        }
+
+        private void AddTransactionMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            AddTransaction();
+        }
+
+        private void PeriodReportMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            PeriodReport();
         }
     }
 }
