@@ -23,13 +23,7 @@
             <!--Toolbar-->
             <Border Grid.Row="0" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="С" Style="{StaticResource DefaultLabel}"/>
-                    <DatePicker x:Name="FromDatePicker" Style="{StaticResource DefaultDatePicker}" />
-
-                    <Label Content="По" Style="{StaticResource DefaultLabel}"/>
-                    <DatePicker x:Name="ToDatePicker" Style="{StaticResource DefaultDatePicker}" />
-
-                    <Button x:Name="ShowButton" Content="Показать" Click="ShowButton_Click"  Style="{StaticResource DefaultMainButton}"/>
+                    <Button x:Name="ShowButton" Content="Обновить" Click="ShowButton_Click"  Style="{StaticResource DefaultMainButton}"/>
                     <Border Width="5" />
 
                     <Button x:Name="CancelButton" Content="Отмена" Click="CancelButton_Click"  Style="{StaticResource DefaultButton}"/>

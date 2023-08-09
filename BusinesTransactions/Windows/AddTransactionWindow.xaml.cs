@@ -28,7 +28,6 @@ namespace BusinesTransactions
             SqlQuery = new SqlQueryBuilder();
 
             SetDefault();
-
             SetComboBoxItems();
         }
 

@@ -335,10 +335,13 @@ namespace BusinesTransactions
         public void PeriodReport()
         {
             var i = new PeriodReport();
-            if (i.ShowDialog() == true)
-            {
-                //Refresh();
-            }
+            i.ShowDialog();
+        }
+
+        public void AddTransactionObject()
+        {
+            var i = new AddTransactionObjectWindow();
+            i.ShowDialog();
         }
 
         private void AddTransactionButton_Click(object sender, RoutedEventArgs e)
@@ -379,6 +382,11 @@ namespace BusinesTransactions
         private void PeriodReportMenuItem_Click(object sender, RoutedEventArgs e)
         {
             PeriodReport();
+        }
+
+        private void AddTransactionObjectMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            AddTransactionObject();
         }
     }
 }

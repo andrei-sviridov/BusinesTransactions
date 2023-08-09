@@ -43,6 +43,10 @@
                                 <MenuItem Header="Удалить" x:Name="DeleteTransactionMenuItem" IsEnabled="False" ToolTip="Удалить транзакцию" Style="{StaticResource DefaultMenuItem}"/>
                             </MenuItem>
 
+                            <MenuItem Header="Управление" ToolTip="Управление счетами" Style="{StaticResource DefaultMenuItem}" >
+                                <MenuItem Header="Добавить счёт" x:Name="AddTransactionObjectMenuItem" Click="AddTransactionObjectMenuItem_Click"  ToolTip="Добавить новый счёт" Style="{StaticResource DefaultMenuItem}"/>
+                            </MenuItem>
+
                             <MenuItem Header="Аналитика" ToolTip="Аналитика и визуализация транзакций" Style="{StaticResource DefaultMenuItem}" >
                                 <MenuItem Header="Отчёт по периодам" x:Name="PeriodReportMenuItem" Click="PeriodReportMenuItem_Click" ToolTip="Отчёт по двухнедельным периодам" Style="{StaticResource DefaultMenuItem}"/>
                             </MenuItem>
